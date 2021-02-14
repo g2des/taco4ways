@@ -1,1 +1,1 @@
-I solemnly swear I am upto no good.
+I solemnly swear I am upto only good.
