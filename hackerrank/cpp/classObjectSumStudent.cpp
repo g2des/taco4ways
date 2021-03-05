@@ -23,7 +23,7 @@ class Student{
 int main(){
 	int n;
 	cin >> n;
-	Student *students = new Student[n];
+	Student students[n];
 	for(int i=0;i<n;i++){
 		students[i].input();
 	}
