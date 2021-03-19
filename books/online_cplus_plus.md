@@ -438,3 +438,209 @@ if (mycolor == Colors::green) mycolor = Colors::red;
 
 ```
 - Enumerated types declared with enum class also have more control over their underlying type : `enum class EyeColor : char {blue, green, brown}; `
+
+
+## Classes
+- Classes are an expanded concept of data structures: like data structures, they can contain data members, but they can also contain functions as members.
+- An object is an instantiation of a class. In terms of variables, a class would be the type, and an object would be the variable.
+- By default, all members of a class declared with the class keyword have private access for all its members.
+- The way of calling constructors by enclosing their arguments in parentheses, as shown above, is known as functional form :  `class_type obj_name(...)`
+- Constructors with a single parameter can be called using the variable initialization syntax (an equal sign followed by the argument): `class_name  object_name = initialization_value;`
+- Uniform initialization : ` class_name object_name { value, value, value, ... }`
+- An advantage of uniform initialization over functional form is that, unlike parentheses, braces cannot be confused with function declarations, and thus can be used to explicitly call default constructors
+```C++
+...
+Circle {} // default constructor
+Circle {10} // parametrized constructor
+...
+```
+
+### Member initialization in constructors
+- When a constructor is used to initialize other members, these other members can be initialized directly, without resorting to statements in its body.
+- For members of fundamental types, it makes no difference which of the ways above the constructor is defined, because they are not initialized by default, but for member objects (those whose type is a class), if they are not initialized after the colon, they are default-constructed.
+- In some other cases, default-construction is not even possible (when the class does not have a default constructor). In these cases, members shall be initialized in the member initialization list.
+```C++
+// member initialization
+...
+class Cylinder {
+    Circle base;
+    double height;
+  public:
+    Cylinder(double r, double h) : base (r), height(h) {}
+    double volume() {return base.area() * height;}
+};
+...
+
+```
+
+### Pointers to class
+```C++
+...
+Rectangle obj (3, 4);
+Rectangle * foo, * bar, * baz;
+foo = &obj;
+bar = new Rectangle (5, 6);
+baz = new Rectangle[2] { {2,5}, {3,6} };
+...
+delete bar;
+delete[] baz;
+...
+```
+### Overloading operators
+
+> Classes, essentially, define new types to be used in C++ code. And types in C++ not only interact with code by means of constructions and assignments. They also interact by means of operators.
+
+- C++ allows most operators to be overloaded so that their behavior can be defined for just about any type, including classes.
+- Syntax : `type operator sign (parameters) { /*... body ...*/ }`
+- The function `operator+` of class CVector overloads the addition operator (+) for that type. Once declared, this function can be called either implicitly using the operator, or explicitly using its functional name:
+```C++
+c = a + b;
+c = a.operator+ (b);
+```
+- The parameter expected for a member function overload for operations such as operator+ is naturally the operand to the right hand side of the operator.
+
+### this keyword
+- The keyword `this` represents a pointer to the object whose member function is being executed.
+
+### Static members
+- Static members have the same properties as non-member variables but they enjoy class scope. For that reason, and to avoid them to be declared several times, they cannot be initialized directly in the class, but need to be initialized somewhere outside it. 
+
+### `const` member functions
+- When an object of a class is qualified as a `const` object:The access to its data members from outside the class is restricted to read-only, as if all its data members were const for those accessing them from outside the class. 
+- The member functions of a `const` object can only be called if they are themselves specified as `const` members.
+- Member functions specified to be const cannot modify non-static data members nor call other non-const member functions. In essence, const members shall not modify the state of an object.
+- Most functions taking classes as parameters actually take them by const reference, and thus, these functions can only access their const members,
+
+### Class templates
+```C++
+template <class T>
+class mypair {
+	T pair[2];
+	mypair(T first, T second){
+		pair[0] = first;
+		pair[1] = second;
+	}
+}
+```
+### Template specialization
+- It is possible to define a different implementation for a template when a specific type is passed as template argument. This is called a template specialization.
+```C++ // template specialization
+#include <iostream>
+using namespace std;
+
+// class template:
+template <class T>
+class mycontainer {
+    T element;
+  public:
+    mycontainer (T arg) {element=arg;}
+    T increase () {return ++element;}
+};
+
+// class template specialization:
+template <>
+class mycontainer <char> {
+    char element;
+  public:
+    mycontainer (char arg) {element=arg;}
+    char uppercase ()
+    {
+      if ((element>='a')&&(element<='z'))
+      element+='A'-'a';
+      return element;
+    }
+};
+
+```
+
+## Friends, inheritance and polymorphism
+- In principle, private and protected members of a class cannot be accessed from outside the same class in which they are declared.
+- A non-member function can access the private and protected members of a class if it is declared a friend of that class.
+```C++
+class Rectangle {
+	// ...
+	friend Rectangle duplicate (const Rectangle&);
+	// ...
+};
+Rectangle duplicate (const Rectangle& param)
+{
+  Rectangle res;
+  res.width = param.width*2;
+  res.height = param.height*2;
+  return res;
+}
+int main () {
+  Rectangle foo;
+  Rectangle bar (2,3);
+  foo = duplicate (bar);
+  cout << foo.area() << '\n';
+  return 0;
+}
+```
+- Derived class syntax for inheritance: `class derived_class_name: public base_class_name { /*...*/ };`
+
+### Virtual members
+- A virtual member is a member function that can be redefined in a derived class, while preserving its calling properties through references.
+```C++
+class Polygon{
+	// ...
+	virtual int area (){ return 0; }
+	// ...     
+}
+```
+- Classes that contain at least one pure virtual function are known as abstract base classes.
+- Pure virtual class syntax : ` virtual int area () =0;`
+
+## Typecasting
+-  For non-fundamental types, arrays and functions implicitly convert to pointers, and pointers in general allow the following conversions:
+    - Null pointers can be converted to pointers of any type
+    - Pointers to any type can be converted to void pointers.
+    - Pointer upcast: pointers to a derived class can be converted to a pointer of an accessible and unambiguous base class, without modifying its const or volatile qualification.
+- Implicit conversion within classes:
+```C++
+class A {};
+
+class B {
+public:
+  // conversion from A (constructor): aka single argument constructor
+  B (const A& x) {}
+  // explicit version
+  explicit B (const A& x) {} 
+  
+  // conversion from A (assignment): aka assignment operator
+  B& operator= (const A& x) {return *this;}
+  // conversion to A (type-cast operator) aka typecasting
+  operator A() {return A();}
+};
+
+int main ()
+{
+  A foo;
+  B bar = foo;    // calls constructor; throws error for explicit
+  B bar (foo);
+  bar = foo;      // calls assignment
+  foo = bar;      // calls type-cast operator
+  return 0;
+}
+```
+- On a function call, C++ allows one implicit conversion to happen for each argument. This may be somewhat problematic for classes, because it is not always what is intended. It can be prevented by marking the affected constructor with the `explicit` keyword
+
+- In order to control unrestricted explicit type-casting , we have four specific casting operators:
+	- dynamic_cast : upcasts and downcasts only if can point to complete object. Returns nullptr if cannot convert successfully.
+	- static_cast : upcasts and downcasts without any evaluations. Onus of working is on programmer.
+	- reinterpret_cast : Cast any pointer to any other pointer. 
+	- const_cast : manipulates constantness of the object pointed by the pointer.
+
+## Preprocessors
+```C++
+#define getmax(a,b) a>b?a:b 
+
+#define TABLE_SIZE 100
+int table1[TABLE_SIZE];
+#undef TABLE_SIZE
+
+#define str(x) #x
+cout << str(test); // equivalent to cout << "test"
+```
+- `#include <header>`: This is used to include headers provided by the implementation, such as the headers that compose the standard library (iostream, string,...).
+- `#include "header"`: The syntax used in the second #include uses quotes, and includes a file. The file is searched for in an implementation-defined manner, which generally includes the current path. In the case that the file is not found, the compiler interprets the directive as a header inclusion.
