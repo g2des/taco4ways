@@ -644,4 +644,3 @@ cout << str(test); // equivalent to cout << "test"
 ```
 - `#include <header>`: This is used to include headers provided by the implementation, such as the headers that compose the standard library (iostream, string,...).
 - `#include "header"`: The syntax used in the second #include uses quotes, and includes a file. The file is searched for in an implementation-defined manner, which generally includes the current path. In the case that the file is not found, the compiler interprets the directive as a header inclusion.
-
