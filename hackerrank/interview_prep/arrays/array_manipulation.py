@@ -15,7 +15,17 @@ import sys
 #
 
 def arrayManipulation(n, queries):
-    # Write your code here
+    array = [0 for _ in range(n)]
+    for query in queries:
+        array[query[0]-1] += query[2]
+        if query[1] < len(array):
+            array[query[1]] -= query[2]
+    max_val = 0
+    sum = 0
+    for num in array:
+        sum += num
+        max_val = max(max_val, sum)
+    return max_val
 
 if __name__ == '__main__':
     fptr = open(os.environ['OUTPUT_PATH'], 'w')
@@ -29,7 +39,7 @@ if __name__ == '__main__':
     queries = []
 
     for _ in range(m):
-        queries.append(list(map(int, input().rstrip().split())))
+        queries.append(tuple(map(int, input().rstrip().split())))
 
     result = arrayManipulation(n, queries)
 

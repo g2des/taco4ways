@@ -15,6 +15,7 @@
     using namespace std;         // make names from std visible without std:: (§3.4)
     ```
 ## Functions
+
 - The main way of getting something done in a C++ program is to call a function to do it.
 - Defining a function is the way you specify how an operation is to be done.
 - **A function cannot be called unless it has been previously declared.**
