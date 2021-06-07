@@ -1,0 +1,22 @@
+Exercies:
+
+  Built in data structures:
+    √ Writing summation code for array, vectors @done (21-06-03 10:36)
+      things to use during coding; Constexpr
+    ☐ Write code to create two vectors from input from commandline - check if they are equal - copy one vector into antoher - modify a  value using at - push back an element at end of an err.
+    ☐ Two dimensional array with printing by const reference and auto keyword and chain member function call with .at
+
+
+  Built in methods and algorithms:
+    ☐ Using secure random number generator to role die with uniform distribution and count frequency
+    ☐ Sorting an arroy of strings, ints and doubles.(separately)  
+    ☐ Binary search on arrays of sorted strings, sorted random ints and doubles.
+    ☐ Functional programming using accumulate
+      using header numeric. Accumulate and other algorithms are higher order functions that can take other function to complete there task
+    ☐ Calculate product of elements in the array, passig a function and passing a lambda expression
+      [](variables){work} // One important thing to remember maybe to use references. maybe.
+    ☐ Generic lambda: Using generic lambda to print array of strings, ints and doubles
+    ☐ Ranges: Write a pipeline to print sum of square of even numbers using views
+      Commands view;; iota , view;;filter, view;;transform, accumulate(begin, end, start val, function) 
+    ☐ Try catch for out of range exception
+    ☐ Reference conundrum : Code pass by value and pass by reference (using pointer and references)
